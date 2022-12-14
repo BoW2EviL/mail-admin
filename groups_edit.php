@@ -19,7 +19,7 @@ if( isset( $_POST['submit'] ) ) {
     $errorUsers = array();
     // Add group to users
     foreach( $membersArray as $member ) {
-        
+
         if( ! empty( $member ) ) {
             $part = explode( "@" , $member );
             $domain = $part[1];
@@ -43,13 +43,13 @@ if( isset( $_POST['submit'] ) ) {
     foreach( $membersArray as $member ) {
         $filter = "(mail=$member)";
         $search = ldap_search( $ds , LDAP_BASEDN , $filter );
-        $e = ldap_get_entries( $ds , $search ); 
+        $e = ldap_get_entries( $ds , $search );
         $info['member'][$count] = $e[0]['dn'];
         $count ++;
     }
     $groupDN = "mail=" . $group . ",ou=Groups,domainName=" . $domain . "," . LDAP_DOMAINDN;
     ldap_modify( $ds , $groupDN , $info );
-    
+
 
     // Owner
     $part = explode( "@" , $group );
@@ -64,7 +64,7 @@ if( isset( $_POST['submit'] ) ) {
         $dnToUse = "mail=" . $group . ",ou=Groups,domainName=" . $domain . "," . LDAP_DOMAINDN;
         ldap_modify( $ds , $dnToUse , array( "listowner" => $owner ) );
     }
-    
+
     // Mods
     $mods = filter_var( $_POST['mods'] , FILTER_SANITIZE_STRING );
     $mod = explode( "," , $mods );
@@ -87,7 +87,7 @@ if( isset( $_POST['submit'] ) ) {
     if( ! empty( $description ) ) {
         ldap_modify( $ds , $dnToUse , array( "description" => $description ) );
     }
-    
+
 
     plugins_process( "groups_edit" , "submit" );
 
@@ -95,7 +95,7 @@ if( isset( $_POST['submit'] ) ) {
         watchdog( "Editing group `" . $group . "`" );
         header( "Location: groups.php?saved" );
     }
-    
+
 }
 ?>
 <html>
@@ -120,7 +120,7 @@ if( isset( $_POST['submit'] ) ) {
                         if( isset( $cannotFindOwner ) ) {
                             echo "<div class='alert alert-danger'><strong>ERROR:</strong> Cannot find the owner, you asked for!</div>";
                         } else {
-                            echo "<div class='alert alert-info'><strong>Note:</strong> Members of a list must have existing mailboxes on this server!</div>"; 
+                            echo "<div class='alert alert-info'><strong>Note:</strong> Members of a list must have existing mailboxes on this server!</div>";
                         }
                         ?>
                         <nav aria-label="breadcrumb">
@@ -149,7 +149,7 @@ if( isset( $_POST['submit'] ) ) {
                             unset( $members['count'] );
                             $membersList = "";
                             foreach( $members as $member ) {
-                                $membersList .= $member['mail'][0] . ","; 
+                                $membersList .= $member['mail'][0] . ",";
                             }
                             $membersList = substr( $membersList , 0  , -1 );
                             ?>
@@ -202,12 +202,13 @@ if( isset( $_POST['submit'] ) ) {
                                 } else {
                                     $policy = "public";
                                 }
-                                $options = array( 0 =>"public" , 1 => "domain" , 2 => "membersonly" , 3=> "membersandmoderatorsonly" );
+                                $options = array( 0 =>"public" , 1 => "domain" , 2 => "membersonly" , 3=> "membersandmoderatorsonly" , 4=> "moderatorsonly");
                                 $key = array(
                                     "public" => "Public",
                                     "domain" => "This domain only",
                                     "membersonly" => "Members only",
-                                    "membersandmoderatorsonly" => "Members and Moderators only"
+                                    "membersandmoderatorsonly" => "Members and Moderators only",
+                                    "moderatorsonly" => "Moderators only"
                                 );
                                 foreach( $options as $option ) {
                                     if( $option == $policy ) {

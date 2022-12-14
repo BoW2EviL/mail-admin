@@ -81,7 +81,8 @@ require 'inc/bind.php';
                                             "public" => "Public",
                                             "domain" => "This domain only",
                                             "membersonly" => "Members only",
-                                            "membersandmoderatorsonly" => "Members and Moderators only"
+                                            "membersandmoderatorsonly" => "Members and Moderators only",
+                                            "moderatorsonly" => "Moderators only"
                                         );
                                         $po = $group['accesspolicy'][0];
                                         echo $key[$po];
@@ -98,7 +99,7 @@ require 'inc/bind.php';
                                 ?>
                             </tbody>
                         </table>
-                        
+
                     </form>
                 </div>
             </div>
